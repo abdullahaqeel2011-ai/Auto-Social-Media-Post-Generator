@@ -1,0 +1,130 @@
+{
+  "name": "Auto Social Media Post Generator",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "triggerAtHour": 9
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        -544,
+        -48
+      ],
+      "id": "5dff685d-97cd-4045-a476-13911cc1c638",
+      "name": "Schedule Trigger"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Generate a short, catchy social media caption about \"{{ $json[\"topic\"] }}\". \nMake it fun, engaging, and ready to post.\n",
+        "options": {
+          "systemMessage": "You are a creative social media content writer specializing in tech topics. \nYour task is to generate **short, catchy, and engaging captions** for social media posts. \nThe current topic is \"{{ $json[\"topic\"] }}\". Make captions **fun, informative, and attention-grabbing**, suitable for Instagram, Twitter, or LinkedIn. \nAvoid hashtags unless specifically requested. \nKeep the tone **friendly and professional**, highlighting the relevance and impact of the topic in its context. \nFocus on creativity, engagement, and making the audience curious about the topic."
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3,
+      "position": [
+        -112,
+        -48
+      ],
+      "id": "f97fc268-f601-40b1-a122-7720075becac",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        -112,
+        160
+      ],
+      "id": "c32f8b12-70d1-4904-a98d-e07d30953dda",
+      "name": "Google Gemini Chat Model",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "t5A9SgWRGR3wN4y2",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "c191f8a3-c1e9-48f0-949b-d9f631f2aaf0",
+              "name": "topic",
+              "value": "topic = \"AI in Marketing\"",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -336,
+        -48
+      ],
+      "id": "82f6d332-9eb5-4967-852f-ca77198edccc",
+      "name": "Edit Fields"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Schedule Trigger": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "f9feed40-a5d4-4dc5-ab3f-a0a743634fb0",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "3d376027b7c5e00d0af30dd4d2431447f6f406c74dbb5c35ace90a073f26d18c"
+  },
+  "id": "SI0r5dBgqCJDYvIY",
+  "tags": []
+}
